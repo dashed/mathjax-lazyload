@@ -8,8 +8,11 @@ define (require) ->
 
       @init_object_watch()
 
+      # Init vars
       @window = window
       @$ = undefined
+      @lmjxeventTimer = undefined
+
       # Watch MathJax
 
       get_this = @
@@ -143,12 +146,18 @@ define (require) ->
 
         get_this.init_renderMathJax()
 
+        _lmjxeventTimer = get_this.lmjxeventTimer
         $(get_this.window).on("scroll.lmjx resize.lmjx", ()->
 
           _stopRender = true
 
-          clearTimeout $.data(this, "lmjxeventTimer")
-          $.data this, "lmjxeventTimer", setTimeout(->
+          if(_lmjxeventTimer)
+            clearTimeout(_lmjxeventTimer)
+            _lmjxeventTimer = undefined
+
+          #clearTimeout $.data(this, "lmjxeventTimer")
+          #$.data this, "lmjxeventTimer", setTimeout(->
+          _lmjxeventTimer = setTimeout(->
             
             # End step of scroll and/or resize event
 
@@ -177,14 +186,6 @@ define (require) ->
 
                   )
               )     
-
-            # _.defer((f, _this)->
-            #     f.call(_this)
-            #   , trigger, get_this )
-
-            # do something
-            #console.log "something happened and stopped!"
-
 
           , 1000)
           )

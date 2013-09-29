@@ -9,6 +9,7 @@ define(function(require) {
       this.init_object_watch();
       this.window = window;
       this.$ = void 0;
+      this.lmjxeventTimer = void 0;
       get_this = this;
       _watch = get_this.watchproperty;
       _watch(window, "$", function($) {
@@ -45,7 +46,7 @@ define(function(require) {
       this.stopRender = false;
       _stopRender = this.stopRender;
       $(function() {
-        var getTextNodesIn, lazy_watch_queue, _escapeRegExp;
+        var getTextNodesIn, lazy_watch_queue, _escapeRegExp, _lmjxeventTimer;
         getTextNodesIn = function(el) {
           return $(el).find(":not(script,img,image,code,audio,input,textarea,button,iframe,canvas)").addBack().contents().filter(function() {
             return this.nodeType === 3;
@@ -88,10 +89,14 @@ define(function(require) {
           });
         });
         get_this.init_renderMathJax();
+        _lmjxeventTimer = get_this.lmjxeventTimer;
         $(get_this.window).on("scroll.lmjx resize.lmjx", function() {
           _stopRender = true;
-          clearTimeout($.data(this, "lmjxeventTimer"));
-          return $.data(this, "lmjxeventTimer", setTimeout(function() {
+          if (_lmjxeventTimer) {
+            clearTimeout(_lmjxeventTimer);
+            _lmjxeventTimer = void 0;
+          }
+          return _lmjxeventTimer = setTimeout(function() {
             var _isElementInViewport;
             _stopRender = false;
             _isElementInViewport = get_this.isElementInViewport;
@@ -113,7 +118,7 @@ define(function(require) {
                 });
               }
             });
-          }, 1000));
+          }, 1000);
         });
         return $(get_this.window).trigger('scroll.lmjx');
       });
