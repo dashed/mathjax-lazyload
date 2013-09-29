@@ -2,7 +2,7 @@
 define(function(require) {
   var Singleton, _LazyLoad;
   _LazyLoad = (function() {
-    _LazyLoad.prototype.VERSION = '1.0.0';
+    _LazyLoad.prototype.VERSION = '1.0.1';
 
     function _LazyLoad(window) {
       var async, get_this, _watch;

@@ -87,7 +87,17 @@ Limitations
 Changelog
 =========
 
-1.0.0 [Sep 29, 2013]:
+## 1.0.1 [Sep 29, 2013]
+
+* Remove dependence on XRegExp (3rd party regex lib)
+
+* Added more tags to avoid when finding MathJax elements to lazy load. 
+
+  **Avoided tags:** image, code, audio, input, textarea, button 
+
+* Minor build script improvement
+
+## 1.0.0 [Sep 29, 2013]
 
 * First commit
 

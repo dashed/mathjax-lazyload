@@ -1,6 +1,8 @@
 ###
 !
-mathjax-lazyload 1.0.0
+mathjax-lazyload v1.0.1
+https://github.com/Dashed/mathjax-lazyload
+
 Alberto Leal (c) 2013 MIT License
 ###
 ((window) ->
