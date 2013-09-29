@@ -53,11 +53,16 @@ mathjax-lazyload always require the following configuration conditions to run:
 
 2. `lazytex2jax` is a defined object
 
-***lazytex2jax***
+### lazytex2jax configuration
 
-The `inlineMath` and `displayMath` properties of `lazytex2jax` are in the same format as it is in `tex2jax`.
-This needs to be manually set for users to decide what to lazy load.
+The `lazytex2jax` configuration property is **not** a native configuration property of MathJax. It is however a configuration property of **mathjax-lazyload**.
 
+The `inlineMath` and `displayMath` properties of `lazytex2jax` are in the same format as it is in `tex2jax` (a configuration property of MathJax). See [tex2jax config options](http://docs.mathjax.org/en/latest/options/tex2jax.html).
+
+The `lazytex2jax` configuration property needs to be manually defined by the user.
+
+
+### lazytex2jax properties
 
 *   `inlineMath`
 
@@ -75,7 +80,7 @@ This needs to be manually set for users to decide what to lazy load.
     displayMath: [ ['$$','$$'], ['\[','\]'] ]
     ```
 
-See [tex2jax config options](http://docs.mathjax.org/en/latest/options/tex2jax.html).
+
 
 Limitations
 ===========
