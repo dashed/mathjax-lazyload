@@ -2,7 +2,7 @@ define (require) ->
 
   class _LazyLoad
 
-    VERSION: '0.1'
+    VERSION: '1.0.0'
 
     constructor: (window) ->
 
@@ -52,7 +52,8 @@ define (require) ->
     bootstrap: () ->
       _ = require('lodash')
       $ = @$
-      XRegExp = require('xregexp')
+      # XRegExp = require('xregexp')
+      # Rely on native regexp
 
       get_this = @
       @stopRender = false
@@ -65,7 +66,7 @@ define (require) ->
 
         # Credit: http://stackoverflow.com/questions/298750/how-do-i-select-text-nodes-with-jquery
         getTextNodesIn = (el) ->
-          $(el).find(":not(iframe,script,img,canvas)").addBack().contents().filter ->
+          $(el).find(":not(script,img,image,code,audio,input,textarea,button,iframe,canvas)").addBack().contents().filter ->
             @nodeType is 3
 
         _escapeRegExp = get_this.escapeRegExp
@@ -73,7 +74,7 @@ define (require) ->
         lazy_watch_queue = {}
 
 
-        # Check precedence of $$ over $
+        # Note: Check precedence of $$ over $???
         _.each(get_this.lazytex2jax, (delimiter_pack, delimiter_pack_name) ->
 
           if not _.isArray(delimiter_pack)
@@ -87,27 +88,41 @@ define (require) ->
             start_delimiter = _escapeRegExp(delimiter[0])
             end_delimiter = _escapeRegExp(delimiter[1])
 
-            regex_string = start_delimiter+'(.*?)'+end_delimiter
+            regex_string = start_delimiter+'([\\s\\S]*?)'+end_delimiter
 
 
 
-            re = new XRegExp.cache(regex_string, "sg");
+            #re = new XRegExp.cache(regex_string, "sg");
+            re = new RegExp(regex_string, 'gi');
 
             $(getTextNodesIn('body')).each(()->
               $this = $(this)
               $text = $this.text()
               if re.test($text)
 
+
+                #stamp = "lazymathjax[name='lazy-load-mathjax-stamp-#{name}']"
+                stamp = "lazymathjax-stamp-#{name}"
+
+
                 lazy_element = {}
                 lazy_element.start_delimiter = delimiter[0]
                 lazy_element.end_delimiter = delimiter[1]
+
                 name = "#{delimiter_pack_name}-#{index}"
-                lazy_element.selector = "lazymathjax[name='lazy-load-mathjax-stamp-#{name}']"
+                stamp = "lazymathjax-stamp-#{name}"
+                
+                lazy_element.selector = stamp
 
                 lazy_watch_queue[name] = lazy_element
 
-                replacementpattern = "<lazymathjax name=\"lazy-load-mathjax-stamp-#{name}\">$1</lazymathjax>"
-                new_text = XRegExp.replace($text, re, replacementpattern)
+                replacementpattern = "<#{stamp}>$1</#{stamp}>"
+
+
+                #new_text = XRegExp.replace($text, re, replacementpattern)
+
+                re.lastIndex = 0 # Needed for native. See: http://xregexp.com/cross_browser/
+                new_text = $text.replace(re, replacementpattern)
 
                 $this.replaceWith(new_text)
               return
@@ -171,7 +186,7 @@ define (require) ->
             #console.log "something happened and stopped!"
 
 
-          , 500)
+          , 1000)
           )
 
         $(get_this.window).trigger('scroll.lmjx')
@@ -183,6 +198,8 @@ define (require) ->
       _ = require('lodash')
 
       if(!@queue?)
+
+        # Create worker
         worker = (_work, callback)->
           _f = _work['f']
           _this = _work['_this']
@@ -193,7 +210,8 @@ define (require) ->
               f.apply(_this,_args)
             , _f, _this, _args )
 
-        @queue = async.queue(worker, 5)
+
+        @queue = async.queue(worker, 2)
 
       if(!@MathJaxQueue? )
         @MathJaxQueue = @window.MathJax.Hub.queue
@@ -240,7 +258,6 @@ define (require) ->
       _queue.push(work_package, (cancelled)->
         #console.log "done!"
         )
-      #if(_queue.length() <= 20)
 
 
 
@@ -262,12 +279,15 @@ define (require) ->
 
     # Credit: http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
     isElementInViewport: (el) ->
+
+      _window = @window
+
       rect = el.getBoundingClientRect()
-      docEl = document.documentElement
-      vWidth = @window.innerWidth or docEl.clientWidth
-      vHeight = @window.innerHeight or docEl.clientHeight
+      docEl = _window.document.documentElement
+      vWidth = _window.innerWidth or docEl.clientWidth
+      vHeight = _window.innerHeight or docEl.clientHeight
       efp = (x, y) ->
-        document.elementFromPoint x, y
+        _window.document.elementFromPoint x, y
 
       contains = (if "contains" of el then "contains" else "compareDocumentPosition")
       has = (if contains is "contains" then 1 else 0x10)

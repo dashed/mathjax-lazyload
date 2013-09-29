@@ -12,7 +12,7 @@ Alberto Leal (c) 2013 MIT License
       # 'jquery': 'libs/jquery-1.10.2.min'
       # 'jquery': 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min'
       'lodash': 'libs/lodash.custom'
-      'xregexp': 'libs/xregexp-amd'
+      #'xregexp': 'libs/xregexp-amd'
       'async': 'libs/async'
 
     shim:
@@ -24,7 +24,7 @@ Alberto Leal (c) 2013 MIT License
 
       "app":
         #deps: ['jquery', 'lodash', 'xregexp', 'async']
-        deps: ['lodash', 'xregexp', 'async']
+        deps: ['lodash', 'async']
         exports: "_LazyLoad"
 
 
