@@ -4,7 +4,7 @@ mathjax-lazyload
 By default MathJax renders (typeset) all math elements on a page.
 This can freeze the browser for a while especially if there are many math elments to render.
 
-`mathjax-lazyload.js` allows Tex (*at the moment*) to be lazily loaded as it comes into view of the browser.
+`mathjax-lazyload.js` delays typesetting of MathJax elements until it comes into view of the browser.
 
 
 Prerequisites
@@ -87,7 +87,7 @@ Limitations
 Changelog
 =========
 
-1.0:
+1.0 [Sep 29, 2013]:
 
 * First commit
 
