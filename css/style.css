@@ -97,7 +97,7 @@ a:focus {
     margin-left: 1em;
 }
 .post-description {
-    font-family: Georgia, "Cambria", serif;
+    /*font-family: Georgia, "Cambria", serif;*/
     color: #444;
     line-height: 1.8em;
 }
