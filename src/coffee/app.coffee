@@ -32,7 +32,9 @@ define (require) ->
 
                 # skipStartupTypeset is required for lazyloading
                 _watch MathJax_Hub_config, "skipStartupTypeset", (skipStartupTypeset)->
-                  if skipStartupTypeset is true
+                  _ = require('lodash')
+                  if skipStartupTypeset is true and _.isObject(lazytex2jax)
+
                     get_this['lazytex2jax'] = lazytex2jax
 
 
@@ -73,7 +75,14 @@ define (require) ->
 
         # Check precedence of $$ over $
         _.each(get_this.lazytex2jax, (delimiter_pack, delimiter_pack_name) ->
+
+          if not _.isArray(delimiter_pack)
+            return
+
           _.each(delimiter_pack, (delimiter, index) ->
+
+            if not _.isArray(delimiter)
+              return
 
             start_delimiter = _escapeRegExp(delimiter[0])
             end_delimiter = _escapeRegExp(delimiter[1])

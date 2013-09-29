@@ -19,7 +19,8 @@ define(function(require) {
               return _watch(MathJax_Hub_config, "lazytex2jax", function(lazytex2jax) {
                 return _watch(MathJax_Hub_config, "skipStartupTypeset", function(skipStartupTypeset) {
                   var _;
-                  if (skipStartupTypeset === true) {
+                  _ = require('lodash');
+                  if (skipStartupTypeset === true && _.isObject(lazytex2jax)) {
                     get_this['lazytex2jax'] = lazytex2jax;
                     _ = require('lodash');
                     _.defer(function(f, _this) {
@@ -54,8 +55,14 @@ define(function(require) {
         _escapeRegExp = get_this.escapeRegExp;
         lazy_watch_queue = {};
         _.each(get_this.lazytex2jax, function(delimiter_pack, delimiter_pack_name) {
+          if (!_.isArray(delimiter_pack)) {
+            return;
+          }
           _.each(delimiter_pack, function(delimiter, index) {
             var end_delimiter, re, regex_string, start_delimiter;
+            if (!_.isArray(delimiter)) {
+              return;
+            }
             start_delimiter = _escapeRegExp(delimiter[0]);
             end_delimiter = _escapeRegExp(delimiter[1]);
             regex_string = start_delimiter + '(.*?)' + end_delimiter;
