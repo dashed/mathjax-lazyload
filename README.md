@@ -87,7 +87,7 @@ Limitations
 Changelog
 =========
 
-1.0 [Sep 29, 2013]:
+1.0.0 [Sep 29, 2013]:
 
 * First commit
 
