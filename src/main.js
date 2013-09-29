@@ -11,7 +11,6 @@ Alberto Leal (c) 2013 MIT License
     urlArgs: 'bust=' + (new Date()).getTime(),
     paths: {
       'lodash': 'libs/lodash.custom',
-      'xregexp': 'libs/xregexp-amd',
       'async': 'libs/async'
     },
     shim: {
@@ -19,7 +18,7 @@ Alberto Leal (c) 2013 MIT License
         exports: '_'
       },
       "app": {
-        deps: ['lodash', 'xregexp', 'async'],
+        deps: ['lodash', 'async'],
         exports: "_LazyLoad"
       }
     }
