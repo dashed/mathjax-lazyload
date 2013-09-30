@@ -48,7 +48,7 @@ define(function(require) {
       $(function() {
         var getTextNodesIn, lazy_watch_queue, _escapeRegExp, _lmjxeventTimer;
         getTextNodesIn = function(el) {
-          return $(el).find(":not(script,img,image,code,audio,input,textarea,button,iframe,canvas)").addBack().contents().filter(function() {
+          return $(el).find(":not(script,noscript,img,image,pre,code,audio,input,textarea,button,style,iframe,canvas)").addBack().contents().filter(function() {
             return this.nodeType === 3;
           });
         };

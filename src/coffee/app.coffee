@@ -69,7 +69,7 @@ define (require) ->
 
         # Credit: http://stackoverflow.com/questions/298750/how-do-i-select-text-nodes-with-jquery
         getTextNodesIn = (el) ->
-          $(el).find(":not(script,img,image,code,audio,input,textarea,button,iframe,canvas)").addBack().contents().filter ->
+          $(el).find(":not(script,noscript,img,image,pre,code,audio,input,textarea,button,style,iframe,canvas)").addBack().contents().filter ->
             @nodeType is 3
 
         _escapeRegExp = get_this.escapeRegExp
