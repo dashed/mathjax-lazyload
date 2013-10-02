@@ -92,6 +92,10 @@ Limitations
 Changelog
 =========
 
+## 1.0.2 [Oct 2, 2013]
+
+* Release mathjax-lazyload to bower. No official build changes, thus the build is still 1.0.1.
+
 ## 1.0.1 [Sep 29, 2013]
 
 * Remove dependence on XRegExp (3rd party regex lib)
