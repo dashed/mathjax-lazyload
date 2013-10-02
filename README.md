@@ -6,6 +6,13 @@ This can freeze the browser for a while especially if there are many math elment
 
 `mathjax-lazyload.js` delays typesetting of MathJax elements until it comes into view of the browser.
 
+Install
+=======
+
+Download from the [project page](https://github.com/Dashed/mathjax-lazyload/).
+
+Install with [Bower](http://bower.io/): `bower install mathjax-lazyload`
+
 
 Prerequisites
 =============
