@@ -1,0 +1,23 @@
+{
+  "name": "mathjax-lazyload",
+  "version": "1.0.1",
+  "homepage": "https://github.com/Dashed/mathjax-lazyload",
+  "authors": [
+    "Alberto <mail4alberto@gmail.com>"
+  ],
+  "description": "Delays loading of MathJax Tex elements",
+  "main": "./dist/mathjax-lazyload.min.js",
+  "keywords": [
+    "mathjax",
+    "lazyload",
+    "tex"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
