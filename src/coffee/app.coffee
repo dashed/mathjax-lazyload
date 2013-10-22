@@ -147,6 +147,7 @@ define (require) ->
         get_this.init_renderMathJax()
 
         _lmjxeventTimer = get_this.lmjxeventTimer
+        _isElementInViewport = get_this.isElementInViewport
         $(get_this.window).on("scroll.lmjx resize.lmjx", ()->
 
           _stopRender = true
@@ -163,21 +164,21 @@ define (require) ->
 
             _stopRender = false
 
-            _isElementInViewport = get_this.isElementInViewport
+            
             _.each(lazy_watch_queue, (delimiter_to_watch, name) ->
 
               $elems = $(delimiter_to_watch.selector)
               
               if ($elems.size() > 0)
                 _renderMathJax = get_this.renderMathJax
-
+                
                 $elems.each(()->
                   
                   if(_stopRender is false and _isElementInViewport($(this).get(0)) is true)
-                    # console.log $(this).get(0) is this
+                    # console.log $(this).get(0)
                     #_renderMathJax(this)
                     render_package = 
-                      elem: this,
+                      elem: $(this).get(0),
                       start_delimiter: delimiter_to_watch.start_delimiter,
                       end_delimiter: delimiter_to_watch.end_delimiter
 
@@ -238,7 +239,7 @@ define (require) ->
 
         $newelement = $("<mathjax>").html(start_delimiter + $element.text() + end_delimiter)
         $element.replaceWith($newelement.get(0))
-        $element.remove()
+        # $element.remove()
 
         QUEUE = @MathJaxQueue
 
@@ -280,29 +281,9 @@ define (require) ->
 
     # Credit: http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
     isElementInViewport: (el) ->
-
-      _window = @window
-
+      $ = @$
       rect = el.getBoundingClientRect()
-      docEl = _window.document.documentElement
-      vWidth = _window.innerWidth or docEl.clientWidth
-      vHeight = _window.innerHeight or docEl.clientHeight
-      efp = (x, y) ->
-        _window.document.elementFromPoint x, y
-
-      contains = (if "contains" of el then "contains" else "compareDocumentPosition")
-      has = (if contains is "contains" then 1 else 0x10)
-      
-      # Return false if it's not in the viewport
-      return false  if rect.right < 0 or rect.bottom < 0 or rect.left > vWidth or rect.top > vHeight
-      
-      # Return true if any of its four corners are visible
-      (eap = efp(rect.left, rect.top)) is el or el[contains](eap) is has or (eap = efp(rect.right, rect.top)) is el or el[contains](eap) is has or (eap = efp(rect.right, rect.bottom)) is el or el[contains](eap) is has or (eap = efp(rect.left, rect.bottom)) is el or el[contains](eap) is has
-
-    isElementInViewport_old: (el) ->
-      rect = el.getBoundingClientRect()
-      return rect.top >= 0 and rect.left >= 0 and rect.bottom <= (@window.innerHeight or document.documentElement.clientHeight) and rect.right <= (@window.innerWidth or document.documentElement.clientWidth)
-
+      return rect.top >= 0 and rect.left >= 0 and rect.bottom <= $(@window).height() and rect.right <= $(@window).width()
 
     escapeRegExp: (str) ->
       str.replace /[\-\[\]{}()*+?.,\\\^$|#\s]/g, "\\$&" #.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");

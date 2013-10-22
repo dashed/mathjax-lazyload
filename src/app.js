@@ -46,7 +46,7 @@ define(function(require) {
       this.stopRender = false;
       _stopRender = this.stopRender;
       $(function() {
-        var getTextNodesIn, lazy_watch_queue, _escapeRegExp, _lmjxeventTimer;
+        var getTextNodesIn, lazy_watch_queue, _escapeRegExp, _isElementInViewport, _lmjxeventTimer;
         getTextNodesIn = function(el) {
           return $(el).find(":not(script,noscript,img,image,pre,code,audio,input,textarea,button,style,iframe,canvas)").addBack().contents().filter(function() {
             return this.nodeType === 3;
@@ -90,6 +90,7 @@ define(function(require) {
         });
         get_this.init_renderMathJax();
         _lmjxeventTimer = get_this.lmjxeventTimer;
+        _isElementInViewport = get_this.isElementInViewport;
         $(get_this.window).on("scroll.lmjx resize.lmjx", function() {
           _stopRender = true;
           if (_lmjxeventTimer) {
@@ -97,9 +98,7 @@ define(function(require) {
             _lmjxeventTimer = void 0;
           }
           return _lmjxeventTimer = setTimeout(function() {
-            var _isElementInViewport;
             _stopRender = false;
-            _isElementInViewport = get_this.isElementInViewport;
             return _.each(lazy_watch_queue, function(delimiter_to_watch, name) {
               var $elems, _renderMathJax;
               $elems = $(delimiter_to_watch.selector);
@@ -109,7 +108,7 @@ define(function(require) {
                   var render_package;
                   if (_stopRender === false && _isElementInViewport($(this).get(0)) === true) {
                     render_package = {
-                      elem: this,
+                      elem: $(this).get(0),
                       start_delimiter: delimiter_to_watch.start_delimiter,
                       end_delimiter: delimiter_to_watch.end_delimiter
                     };
@@ -163,7 +162,6 @@ define(function(require) {
         end_delimiter = render_package.end_delimiter;
         $newelement = $("<mathjax>").html(start_delimiter + $element.text() + end_delimiter);
         $element.replaceWith($newelement.get(0));
-        $element.remove();
         QUEUE = this.MathJaxQueue;
         some_callback = function() {
           return callback();
@@ -190,27 +188,10 @@ define(function(require) {
     };
 
     _LazyLoad.prototype.isElementInViewport = function(el) {
-      var contains, docEl, eap, efp, has, rect, vHeight, vWidth, _window;
-      _window = this.window;
+      var $, rect;
+      $ = this.$;
       rect = el.getBoundingClientRect();
-      docEl = _window.document.documentElement;
-      vWidth = _window.innerWidth || docEl.clientWidth;
-      vHeight = _window.innerHeight || docEl.clientHeight;
-      efp = function(x, y) {
-        return _window.document.elementFromPoint(x, y);
-      };
-      contains = ("contains" in el ? "contains" : "compareDocumentPosition");
-      has = (contains === "contains" ? 1 : 0x10);
-      if (rect.right < 0 || rect.bottom < 0 || rect.left > vWidth || rect.top > vHeight) {
-        return false;
-      }
-      return (eap = efp(rect.left, rect.top)) === el || el[contains](eap) === has || (eap = efp(rect.right, rect.top)) === el || el[contains](eap) === has || (eap = efp(rect.right, rect.bottom)) === el || el[contains](eap) === has || (eap = efp(rect.left, rect.bottom)) === el || el[contains](eap) === has;
-    };
-
-    _LazyLoad.prototype.isElementInViewport_old = function(el) {
-      var rect;
-      rect = el.getBoundingClientRect();
-      return rect.top >= 0 && rect.left >= 0 && rect.bottom <= (this.window.innerHeight || document.documentElement.clientHeight) && rect.right <= (this.window.innerWidth || document.documentElement.clientWidth);
+      return rect.top >= 0 && rect.left >= 0 && rect.bottom <= $(this.window).height() && rect.right <= $(this.window).width();
     };
 
     _LazyLoad.prototype.escapeRegExp = function(str) {
